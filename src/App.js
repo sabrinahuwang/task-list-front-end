@@ -20,7 +20,7 @@ const TASKS = [
 // 1. Find task with the ID
 const App = () => {
   const [taskListState, setTaskListState] = useState(TASKS);
-  // 2. Toggle the srikethrough
+  // 2. Toggle the strikethrough
   // 3. Set new state
 
   const handleTaskCompleteToggle = useCallback(
@@ -38,6 +38,22 @@ const App = () => {
     },
     [taskListState]
   );
+  const deleteTask = useCallback(
+    (updatedTask) => {
+      const tasks = taskListState.filter((task) => {
+        if (task.id === updatedTask.id) {
+          // Use spread syntax to duplicate the object and delete the specific task
+          return false;
+        } else {
+          return true;
+        }
+      });
+
+      setTaskListState(tasks);
+    },
+    [taskListState]
+  );
+
   return (
     <div className="App">
       <header className="App-header">
@@ -48,6 +64,7 @@ const App = () => {
           <TaskList
             tasks={taskListState}
             onTaskCompleteToggle={handleTaskCompleteToggle}
+            deleteTask={deleteTask}
           />
         </div>
       </main>
