@@ -3,6 +3,8 @@ import TaskList from './components/TaskList.js';
 import './App.css';
 
 import { useState, useCallback } from 'react';
+import { useEffect } from 'react';
+import axios from 'axios';
 
 const TASKS = [
   {
@@ -53,6 +55,24 @@ const App = () => {
     },
     [taskListState]
   );
+  const url = 'https://task-list-api-c17.herokuapp.com/tasks';
+
+  useEffect(() => {
+    axios
+      .get(url)
+      .then((response) => {
+        console.log(response);
+        const data = response.data.map((task) => ({
+          id: task.id,
+          title: task.title,
+          isComplete: task.is_complete,
+        }));
+        setTaskListState(data);
+      })
+      .catch((error) => {
+        console.log();
+      });
+  }, []);
 
   return (
     <div className="App">
