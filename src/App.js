@@ -27,8 +27,24 @@ const App = () => {
 
   const handleTaskCompleteToggle = useCallback(
     (updatedTask) => {
+      const task = taskListState.find((task) => task.id === updatedTask);
+      let url;
+      if (task.isComplete) {
+        url = `https://task-list-api-c17.herokuapp.com/tasks/${updatedTask}/mark_complete`;
+      } else {
+        url = `https://task-list-api-c17.herokuapp.com/tasks/${updatedTask}/mark_incomplete`;
+      }
+
+      axios.patch(url).then(() => {
+        console.log(
+          `Task ${updatedTask} marked ${
+            task.isComplete ? 'complete' : 'incomplete'
+          }`
+        );
+      });
+
       const tasks = taskListState.map((task) => {
-        if (task.id === updatedTask.id) {
+        if (task.id === updatedTask) {
           // Use spread syntax to duplicate the object and flip isComplete
           return { ...task, isComplete: !task.isComplete };
         } else {
@@ -42,16 +58,16 @@ const App = () => {
   );
   const deleteTask = useCallback(
     (updatedTask) => {
-      const tasks = taskListState.filter((task) => {
-        if (task.id === updatedTask.id) {
-          // Use spread syntax to duplicate the object and delete the specific task
-          return false;
-        } else {
-          return true;
-        }
+      // Make request to delete task from server
+      const url = `https://task-list-api-c17.herokuapp.com/tasks/${updatedTask}`;
+      // When server request completes, remove task from local state
+      axios.delete(url).then(() => {
+        console.log(`Task ${updatedTask} deleted`);
+        const tasks = taskListState.filter((task) => {
+          return task.id !== updatedTask;
+        });
+        setTaskListState(tasks);
       });
-
-      setTaskListState(tasks);
     },
     [taskListState]
   );
