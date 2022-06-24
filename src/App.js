@@ -5,6 +5,7 @@ import './App.css';
 import { useState, useCallback } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
+import { NewTaskForm } from './components/NewTaskForm.js';
 
 const TASKS = [
   {
@@ -71,6 +72,19 @@ const App = () => {
     },
     [taskListState]
   );
+
+  const submitNewTask = useCallback(
+    (newTask) => {
+      const url = `https://task-list-api-c17.herokuapp.com/tasks`;
+      axios.post(url, newTask).then((response) => {
+        console.log(`Task ${response.data.task.id} submitted`);
+        const newState = [...taskListState, response.data.task];
+        setTaskListState(newState);
+      });
+    },
+    [taskListState]
+  );
+
   const url = 'https://task-list-api-c17.herokuapp.com/tasks';
 
   useEffect(() => {
@@ -102,6 +116,7 @@ const App = () => {
             onTaskCompleteToggle={handleTaskCompleteToggle}
             deleteTask={deleteTask}
           />
+          <NewTaskForm onSubmit={submitNewTask} />
         </div>
       </main>
     </div>
