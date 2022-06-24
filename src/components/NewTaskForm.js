@@ -1,6 +1,5 @@
 import React from 'react';
 import { useState } from 'react';
-import { removeProps } from 'react-foundation/lib/utils';
 import PropTypes from 'prop-types';
 
 export const NewTaskForm = (props) => {

@@ -75,7 +75,7 @@ const App = () => {
 
   const submitNewTask = useCallback(
     (newTask) => {
-      const url = `https://task-list-api-c17.herokuapp.com/tasks`;
+      const url = 'https://task-list-api-c17.herokuapp.com/tasks';
       axios.post(url, newTask).then((response) => {
         console.log(`Task ${response.data.task.id} submitted`);
         const newState = [...taskListState, response.data.task];
@@ -91,7 +91,6 @@ const App = () => {
     axios
       .get(url)
       .then((response) => {
-        console.log(response);
         const data = response.data.map((task) => ({
           id: task.id,
           title: task.title,
@@ -100,7 +99,7 @@ const App = () => {
         setTaskListState(data);
       })
       .catch((error) => {
-        console.log();
+        console.log(error);
       });
   }, []);
 
